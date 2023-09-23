@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+// user.entity.ts
+import { Role } from 'src/auth/entities/role.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
 export class User {
@@ -6,16 +8,14 @@ export class User {
   id: number;
 
   @Column()
-  name: string;
+  username: string;
+
+  @Column({ unique: true })
+  email: string;
 
   @Column()
-  email: string;
-  @Column({
-    default: false,
-  })
-  public: boolean;
+  password: string;
 
-  constructor(partial: Partial<User>) {
-    Object.assign(this, partial);
-  }
+  @OneToMany(() => Role, (role) => role.user)
+  roles: Role[];
 }
